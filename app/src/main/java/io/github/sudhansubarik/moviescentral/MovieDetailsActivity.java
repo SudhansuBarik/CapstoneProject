@@ -48,9 +48,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setMovieDetails() {
-        API_KEY = getResources().getString(R.string.tmdb_api_key);
+        API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "API Error", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Invalid API Key", Toast.LENGTH_LONG).show();
             return;
         }
 

@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        API_KEY = getResources().getString(R.string.tmdb_api_key);
+        API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "API Key Not Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Invalid API Key", Toast.LENGTH_LONG).show();
             return;
         }
 

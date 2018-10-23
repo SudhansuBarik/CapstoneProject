@@ -1,4 +1,4 @@
-package io.github.sudhansubarik.moviescentral;
+package io.github.sudhansubarik.moviescentral.activities;
 
 /*
  * References
@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import io.github.sudhansubarik.moviescentral.BuildConfig;
+import io.github.sudhansubarik.moviescentral.R;
 import io.github.sudhansubarik.moviescentral.adapters.MoviesAdapter;
 import io.github.sudhansubarik.moviescentral.models.Movie;
 import io.github.sudhansubarik.moviescentral.models.MoviesList;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.activity_main_progressBar);
 
         // Spinner dropdown elements
-        String[] filter = {"Popular", "Top Rated"};
+        String[] filter = {"Popular", "Top Rated", "Upcoming", "Favorites"};
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
@@ -82,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         loadMovies(2);
+                        break;
+                    case 2:
+                        loadMovies(3);
+                        break;
+                    case 3:
+                        loadMovies(4);
                         break;
                 }
             }
@@ -109,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 2:
                     call = moviesApiService.getTopRatedMovies(API_KEY);
+                    break;
+                case 3:
+                    call = moviesApiService.getUpcomingMovies(API_KEY);
                     break;
             }
             call.enqueue(new Callback<MoviesList>() {

@@ -1,6 +1,6 @@
 # MoviesCentral
 This is the repository for Popular Movies Stage 1 project for Google India Scholarship 2018.
-This App uses The Movie Database (TMDB) API to display Popular and Top Rated movies.
+This App uses The Movie Database (TMDB) API to display Popular and Top Rated dbMovies.
 
 # Setup Instructions
 1. Fork Repository

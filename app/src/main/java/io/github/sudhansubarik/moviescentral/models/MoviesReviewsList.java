@@ -1,19 +1,16 @@
 package io.github.sudhansubarik.moviescentral.models;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
-public class MoviesList {
-
+public class MoviesReviewsList {
     @SerializedName("page")
     private int page;
-
     @SerializedName("results")
-    private List<Movie> results;
-
+    private List<MoviesReviews> results;
     @SerializedName("total_results")
     private int totalResults;
-
     @SerializedName("total_pages")
     private int totalPages;
 
@@ -25,11 +22,11 @@ public class MoviesList {
         this.page = page;
     }
 
-    public List<Movie> getResults() {
+    public List<MoviesReviews> getResults() {
         return results;
     }
 
-    public void setResults(List<Movie> results) {
+    public void setResults(List<MoviesReviews> results) {
         this.results = results;
     }
 

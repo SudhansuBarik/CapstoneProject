@@ -32,6 +32,21 @@ public class Movie implements Parcelable {
     @SerializedName("vote_count")
     private int voteCount;
 
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    public Movie() {
+    }
+
     public int getId() {
         return id;
     }
@@ -128,51 +143,71 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
     }
 
+    public Movie(
+            int id,
+            String title,
+            String originalTitle,
+            String tagline,
+            String overview,
+            boolean adult,
+            String posterPath,
+            String backdropPath,
+            String releaseDate,
+            boolean video,
+            double voteAverage,
+            int voteCount) {
+        this.id = id;
+        this.title = title;
+        this.originalTitle = originalTitle;
+        this.tagline = tagline;
+        this.overview = overview;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.releaseDate = releaseDate;
+        this.video = video;
+        this.voteAverage = voteAverage;
+        this.voteCount = voteCount;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
+    protected Movie(Parcel in) {
+
+        title = in.readString();
+        id = in.readInt();
+        originalTitle = in.readString();
+        tagline = in.readString();
+        overview = in.readString();
+        adult = in.readByte() != 0x00;
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        releaseDate = in.readString();
+        video = in.readByte() != 0x00;
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.title);
-        dest.writeInt(this.id);
-        dest.writeString(this.originalTitle);
-        dest.writeString(this.tagline);
-        dest.writeString(this.overview);
-        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
-        dest.writeString(this.posterPath);
-        dest.writeString(this.backdropPath);
-        dest.writeString(this.releaseDate);
-        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.voteAverage);
-        dest.writeInt(this.voteCount);
-    }
 
-    protected Movie(Parcel in) {
-        this.title = in.readString();
-        this.id = in.readInt();
-        this.originalTitle = in.readString();
-        this.tagline = in.readString();
-        this.overview = in.readString();
-        this.adult = in.readByte() != 0;
-        this.posterPath = in.readString();
-        this.backdropPath = in.readString();
-        this.releaseDate = in.readString();
-        this.video = in.readByte() != 0;
-        this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
-        this.voteCount = in.readInt();
-    }
-
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
+        dest.writeString(title);
+        dest.writeInt(id);
+        dest.writeString(originalTitle);
+        dest.writeString(tagline);
+        dest.writeString(overview);
+        dest.writeByte((byte) (adult ? 0x01 : 0x00));
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeString(releaseDate);
+        dest.writeByte((byte) (video ? 0x01 : 0x00));
+        if (voteAverage == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(voteAverage);
         }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
+        dest.writeInt(voteCount);
+    }
 }

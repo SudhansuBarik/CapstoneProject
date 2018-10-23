@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import io.github.sudhansubarik.moviescentral.models.Movie;
-import io.github.sudhansubarik.moviescentral.MovieDetailsActivity;
+import io.github.sudhansubarik.moviescentral.activities.MovieDetailsActivity;
 import io.github.sudhansubarik.moviescentral.R;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
@@ -84,7 +84,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                 }
             }
 
-            // picasso:2.71828 :::: public void onError(Exception e)
+            // picasso:2.71828 :: public void onError(Exception e)
             @Override
             public void onError() {
 

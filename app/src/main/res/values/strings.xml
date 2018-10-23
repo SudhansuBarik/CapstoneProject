@@ -2,9 +2,12 @@
     <string name="app_name">Movies Central</string>
     <string name="title_activity_movie_details">MovieDetailsActivity</string>
     <string name="base_tmdb_img_url">http://image.tmdb.org/t/p/</string>
+    <string name="youtube_img_url">http://img.youtube.com/vi/</string>
     <string name="action_settings">Settings</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="overview">Overview</string>
     <string name="sort_by">Sort By:</string>
     <string name="contentDescription">Movie Poster</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
 </resources>

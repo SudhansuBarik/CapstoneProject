@@ -9,10 +9,6 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-/*
-Refer for Room Persistence DB:: https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
- */
-
 @Dao
 public interface DataAccessObject {
     @Insert
@@ -21,10 +17,10 @@ public interface DataAccessObject {
     @Insert
     void insertMultipleMovies(List<DbMovies> dbMoviesList);
 
-    @Query("SELECT * FROM favorites WHERE movieId = :movieId")
+    @Query("SELECT * FROM DbMovies WHERE movieId = :movieId")
     DbMovies fetchOneMovieByMovieId(int movieId);
 
-    @Query("SELECT * FROM favorites")
+    @Query("SELECT * FROM DbMovies")
     LiveData<List<DbMovies>> fetchAllMovies();
 
     @Update

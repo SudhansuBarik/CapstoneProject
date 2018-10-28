@@ -12,8 +12,11 @@ import android.content.Context;
 @Database(entities = {DbMovies.class}, version = 1)
 public abstract class FavoritesDatabase extends RoomDatabase {
 
-    private static final Object sLock = new Object();
     private static FavoritesDatabase INSTANCE;
+
+    private static final Object sLock = new Object();
+
+    public abstract DataAccessObject dataAccessObject();
 
     public static FavoritesDatabase getINSTANCE(Context context) {
         synchronized (sLock) {
@@ -25,6 +28,4 @@ public abstract class FavoritesDatabase extends RoomDatabase {
             return INSTANCE;
         }
     }
-
-    public abstract DataAccessObject dataAccessObject();
 }

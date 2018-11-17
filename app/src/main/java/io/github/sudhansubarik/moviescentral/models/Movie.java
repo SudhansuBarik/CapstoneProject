@@ -32,6 +32,9 @@ public class Movie implements Parcelable {
     @SerializedName("vote_count")
     private int voteCount;
 
+    public Movie() {
+    }
+
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
@@ -43,9 +46,6 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
-
-    public Movie() {
-    }
 
     public int getId() {
         return id;
@@ -143,6 +143,21 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
     }
 
+    protected Movie(Parcel in) {
+
+        title = in.readString();
+        id = in.readInt();
+        originalTitle = in.readString();
+        tagline = in.readString();
+        overview = in.readString();
+        adult = in.readByte() != 0x00;
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        releaseDate = in.readString();
+        video = in.readByte() != 0x00;
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
     public Movie(
             int id,
             String title,
@@ -161,32 +176,13 @@ public class Movie implements Parcelable {
         this.originalTitle = originalTitle;
         this.tagline = tagline;
         this.overview = overview;
+        this.adult = adult;
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.releaseDate = releaseDate;
         this.video = video;
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    protected Movie(Parcel in) {
-
-        title = in.readString();
-        id = in.readInt();
-        originalTitle = in.readString();
-        tagline = in.readString();
-        overview = in.readString();
-        adult = in.readByte() != 0x00;
-        posterPath = in.readString();
-        backdropPath = in.readString();
-        releaseDate = in.readString();
-        video = in.readByte() != 0x00;
-        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
     }
 
     @Override
@@ -210,4 +206,10 @@ public class Movie implements Parcelable {
         }
         dest.writeInt(voteCount);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }

@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +52,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private Movie movie1 = new Movie(), movie;
     private Boolean isFavorite = false;
     private TextView titleTextView, ratingTextView, releaseDateTextView, overviewTextView, reviewsCommentsTextView, moreTextView;
-    private FloatingActionButton favoriteFab;
+    private CheckBox checkBox;
     private RecyclerView recyclerViewTrailers;
 
     @Override
@@ -66,7 +68,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         overviewTextView = findViewById(R.id.overview_textView);
         reviewsCommentsTextView = findViewById(R.id.reviews_comments_textView);
         moreTextView = findViewById(R.id.more_textView);
-        favoriteFab = findViewById(R.id.details_favorite_fab);
+        checkBox = findViewById(R.id.details_fav_checkbox);
         recyclerViewTrailers = findViewById(R.id.trailers_recyclerView);
 
         Intent intent = getIntent();
@@ -95,7 +97,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (dbMovies != null) {
                     isFavorite = true; // set Favourite true
                     Log.d(TAG, "Database: " + movie1.getPosterPath() + " > " + dbMovies.getPosterPath() + " " + isFavorite);
-                    favouriteBtn(); // refresh fav button
                     Movie movie = new Movie(
                             dbMovies.getMovieId(),
                             dbMovies.getMovieName(),
@@ -110,20 +111,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             dbMovies.getVoteAverage(),
                             dbMovies.getVoteCount());
                 } else {
-                    favouriteBtn();
                 }
             }
         }).start();
 
         setMovieDetails();
 
-        favoriteFab.setOnClickListener(new View.OnClickListener() {
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 favorite(isFavorite);
             }
         });
-
     }
 
     private void setMovieDetails() {
@@ -198,7 +197,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }).start();
                     }
                 } else {
-                    reviewsCommentsTextView.setText("No Reviews");
+                    reviewsCommentsTextView.setText(R.string.no_reviews);
                     moreTextView.setText("");
                 }
             }
@@ -233,7 +232,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public void favorite(final boolean isFavorite1) {
         if (isFavorite1) {
             // Remove Movie from DB
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -243,11 +241,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             movie1.getVoteAverage(), movie1.getVoteCount());
                     moviesViewModel.deleteMovie(movie);
                     isFavorite = false;
-                    favouriteBtn();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MovieDetailsActivity.this, "Removed Favourite", Toast.LENGTH_LONG).show();
+                            checkBox.setText(R.string.add_to_favorites);
+                            Toast.makeText(MovieDetailsActivity.this, "Removed from Favourites", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -263,33 +261,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             movie1.getVoteAverage(), movie1.getVoteCount());
                     moviesViewModel.addMovie(movie);
                     isFavorite = true;
-                    favouriteBtn();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MovieDetailsActivity.this, "Added to Favourite", Toast.LENGTH_LONG).show();
+                            checkBox.setText(R.string.remove_from_favorites);
+                            Toast.makeText(MovieDetailsActivity.this, "Added to Favourites", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
             }).start();
-        }
-    }
-
-    public void favouriteBtn() {
-        if (isFavorite) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-//                    favoriteFab.setImageResource(R.drawable.if_favorite_delete_51907);
-                }
-            });
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-//                    favoriteFab.setImageResource(R.drawable.if_favorite_add_51906);
-                }
-            });
         }
     }
 }

@@ -33,6 +33,7 @@ public class DbMovies {
         this.originalTitle = originalTitle;
         this.tagline = tagline;
         this.overview = overview;
+        this.adult = adult;
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.releaseDate = releaseDate;

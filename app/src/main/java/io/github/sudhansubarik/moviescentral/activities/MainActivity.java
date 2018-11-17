@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ProgressBar progressBar;
     public static final String LIFECYCLE_CALLBACK_MOVIE_LIST = "movie_list";
-    TextView textViewMoviesType;
     Boolean doubleBackToExitPressedOnce = false;
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems, pageMovie = 1, totalPage = 1, movieRequestType = 1;
@@ -84,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         filterSpinner = findViewById(R.id.filter_spinner);
         recyclerView = findViewById(R.id.home_recyclerView);
         progressBar = findViewById(R.id.activity_main_progressBar);
+
         manager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(manager);
         // Designate all items in the grid to have the same size
@@ -229,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
                                             progressBar.setVisibility(View.GONE);
                                         }
                                     }
-
                                     @Override
                                     public void onFailure(Call<Movie> call, Throwable t) {
                                         // Log error here since request failed
@@ -294,7 +292,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
             return;
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Click Back again to Exit", Toast.LENGTH_SHORT).show();
 

@@ -9,14 +9,14 @@ import android.content.Context;
  LiveData:: https://medium.com/@guendouz/room-livedata-and-recyclerview-d8e96fb31dfe
  */
 
-@Database(entities = {DbMovies.class}, version = 1)
+@Database(entities = {DbMovies.class}, version = 1, exportSchema = false)
 public abstract class FavoritesDatabase extends RoomDatabase {
 
     private static FavoritesDatabase INSTANCE;
 
-    private static final Object sLock = new Object();
-
     public abstract DataAccessObject dataAccessObject();
+
+    private static final Object sLock = new Object();
 
     public static FavoritesDatabase getINSTANCE(Context context) {
         synchronized (sLock) {

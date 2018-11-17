@@ -24,43 +24,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private List<Movie> moviesList;
     private Context context;
 
-    @Override
-    public MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_grid_item, parent, false);
-        return new MoviesViewHolder(view);
-    }
-
-    public MoviesAdapter(Context context, List<Movie> moviesList) {
-        this.context = context;
-        this.moviesList = moviesList;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull final MoviesViewHolder holder, int position) {
-        String url = context.getResources().getString(R.string.base_tmdb_img_url) + "w185/" + moviesList.get(position).getPosterPath();
-
-        Movie movie = moviesList.get(position);
-        holder.title.setText(movie.getTitle());
-        holder.year.setText(movie.getReleaseDate());
-        holder.rating.setText(movie.getVoteAverage() + "");
-
-        // In picasso:2.71828 :::: Picasso.get().load(url).into(holder.thumbnail, new com.squareup.picasso.Callback()
-        Picasso.with(context).load(url).into(holder.thumbnail, new com.squareup.picasso.Callback() {
-            @Override
-            public void onSuccess() {
-                if (holder.progressBar != null) {
-                    holder.progressBar.setVisibility(View.GONE);
-                }
-            }
-
-            // picasso:2.71828 :: public void onError(Exception e)
-            @Override
-            public void onError() {
-            }
-        });
-    }
-
     public class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         ImageView thumbnail;
@@ -89,6 +52,43 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                 }
             });
         }
+    }
+
+    public MoviesAdapter(Context context, List<Movie> moviesList) {
+        this.context = context;
+        this.moviesList = moviesList;
+    }
+
+    @Override
+    public MoviesAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.movie_grid_item, parent, false);
+        return new MoviesViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final MoviesViewHolder holder, int position) {
+        String url = context.getResources().getString(R.string.base_tmdb_img_url) + "w185/" + moviesList.get(position).getPosterPath();
+
+        Movie movie = moviesList.get(position);
+        holder.title.setText(movie.getTitle());
+        holder.year.setText(movie.getReleaseDate());
+        holder.rating.setText(movie.getVoteAverage() + "");
+
+        // In picasso:2.71828 :::: Picasso.get().load(url).into(holder.thumbnail, new com.squareup.picasso.Callback()
+        Picasso.with(context).load(url).into(holder.thumbnail, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                if (holder.progressBar != null) {
+                    holder.progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            // picasso:2.71828 :: public void onError(Exception e)
+            @Override
+            public void onError() {
+            }
+        });
     }
 
     @Override

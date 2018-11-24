@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String LIFECYCLE_CALLBACK_MOVIE_LIST = "movie_list";
     Boolean doubleBackToExitPressedOnce = false;
     Boolean isScrolling = false;
-    int currentItems, totalItems, scrollOutItems, pageMovie = 1, totalPage = 1, movieRequestType = 1;
+    int currentItems, totalItems, scrollOutItems, movieRequestType = 1;
     GridLayoutManager manager;
     List<Movie> movieList = new ArrayList<>();
     List<DbMovies> dbMoviesList = new ArrayList<>();
     MoviesAdapter moviesAdapter;
     MoviesViewModel moviesViewModel;
     private Parcelable recyclerViewState;
+    ArrayAdapter<String> dataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         // Spinner dropdown elements
         String[] filter = {"Popular", "Top Rated", "Favorites"};
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
+        dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
@@ -141,13 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
                     totalItems = manager.getItemCount();
                     scrollOutItems = manager.findFirstVisibleItemPosition();
-                    if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
-                        isScrolling = false;
-                        if (pageMovie == 1 || pageMovie < totalPage) {
-                            pageMovie = pageMovie + 1;
-                            loadMovies();
-                        }
-                    }
                 }
             }
         });
@@ -177,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                             movies.clear();
                             movieRequestType = 1;
                             loadMovies();
-                            Toast.makeText(MainActivity.this, "No Favourite Movies", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -228,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                                             progressBar.setVisibility(View.GONE);
                                         }
                                     }
+
                                     @Override
                                     public void onFailure(Call<Movie> call, Throwable t) {
                                         // Log error here since request failed
@@ -240,32 +234,27 @@ public class MainActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                             }
                             recyclerView.setAdapter(null);
+//                            filterSpinner.setSelection(dataAdapter.getPosition("Popular"));
                             Toast.makeText(MainActivity.this, "No Favourite movies", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Call<MoviesList> call = apiService.getPopularMovies(API_KEY, pageMovie);
+                        Call<MoviesList> call = apiService.getPopularMovies(API_KEY);
                         switch (response) {
                             case 1:
-                                call = apiService.getPopularMovies(API_KEY, pageMovie);
+                                call = apiService.getPopularMovies(API_KEY);
                                 break;
                             case 2:
-                                call = apiService.getTopRatedMovies(API_KEY, pageMovie);
+                                call = apiService.getTopRatedMovies(API_KEY);
                                 break;
                         }
                         // MoviesList Callback
                         call.enqueue(new Callback<MoviesList>() {
                             @Override
                             public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
-                                pageMovie = response.body().getPage();
                                 List<Movie> a = response.body().getResults();
-                                movieList.addAll(a);
-                                if (pageMovie == 1) {
-                                    totalPage = response.body().getTotalPages();
-                                    moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList);
-                                    recyclerView.setAdapter(moviesAdapter);
-                                } else {
-                                    moviesAdapter.notifyDataSetChanged();
-                                }
+                                moviesAdapter = new MoviesAdapter(getApplicationContext(), a);
+                                recyclerView.setAdapter(moviesAdapter);
+                                moviesAdapter.notifyDataSetChanged();
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
                                 }

@@ -3,6 +3,7 @@ package io.github.sudhansubarik.moviescentral.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import io.github.sudhansubarik.moviescentral.models.MoviesTrailers;
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailerViewHolder> {
 
-    static List<MoviesTrailers> trailers;
+    private static List<MoviesTrailers> trailers;
     private int rowLayout;
     private Context context;
 
@@ -30,15 +31,16 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public TrailersAdapter.TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrailersAdapter.TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
 
         return new TrailerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final TrailerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final TrailerViewHolder holder, int position) {
         String url = context.getResources().getString(R.string.youtube_img_url) + trailers.get(holder.getAdapterPosition()).getKey() + "/hqdefault.jpg";
 
         holder.trailerTitle.setText(trailers.get(holder.getAdapterPosition()).getName());
@@ -63,13 +65,13 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         return trailers.size();
     }
 
-    public static class TrailerViewHolder extends RecyclerView.ViewHolder {
+    static class TrailerViewHolder extends RecyclerView.ViewHolder {
 
         TextView trailerTitle, trailerSub;
         ImageView trailerImageView;
         ProgressBar progressBar;
 
-        public TrailerViewHolder(View itemView) {
+        TrailerViewHolder(View itemView) {
             super(itemView);
 
             trailerTitle = itemView.findViewById(R.id.trailer_title_textView);

@@ -13,16 +13,22 @@ package io.github.sudhansubarik.moviescentral.activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -31,12 +37,19 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.sudhansubarik.moviescentral.BuildConfig;
 import io.github.sudhansubarik.moviescentral.R;
 import io.github.sudhansubarik.moviescentral.adapters.MoviesAdapter;
+import io.github.sudhansubarik.moviescentral.firebase.LoginActivity;
+import io.github.sudhansubarik.moviescentral.firebase.ProfileActivity;
 import io.github.sudhansubarik.moviescentral.models.Movie;
 import io.github.sudhansubarik.moviescentral.models.MoviesList;
 import io.github.sudhansubarik.moviescentral.models.MoviesViewModel;
@@ -67,10 +80,18 @@ public class MainActivity extends AppCompatActivity {
     private Parcelable recyclerViewState;
     ArrayAdapter<String> dataAdapter;
 
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //get current user
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
 
         API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
@@ -125,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (movieRequestType != 3) {
                     if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
@@ -135,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (movieRequestType != 3) {
                     currentItems = manager.getChildCount();
@@ -161,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable List<DbMovies> movies) {
                         dbMoviesList = movies;
+                        assert dbMoviesList != null;
                         if (dbMoviesList.size() != 0 && movieRequestType == 3) {
                             Log.d(TAG, ">>>>>>>>>>\n\n>>>" + dbMoviesList.size());
                             loadMovies();
@@ -179,6 +201,34 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         loadMovies();
+
+        // Ads
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_my_profile) {
+            myProfile();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -186,6 +236,32 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         recyclerViewState = manager.onSaveInstanceState();
         outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
+    }
+
+    private void myProfile() {
+        if (user == null) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Info");
+            builder.setMessage("Please Login to continue");
+            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    auth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void loadMovies() {
@@ -205,10 +281,9 @@ public class MainActivity extends AppCompatActivity {
                                 Call<Movie> call = apiService.getMovieDetails(dbMoviesList.get(i).getMovieId(), API_KEY);
                                 call.enqueue(new Callback<Movie>() {
                                     @Override
-                                    public void onResponse(Call<Movie> call, Response<Movie> response) {
-
+                                    public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
                                         Movie a = response.body();
-
+                                        assert a != null;
                                         Log.d(TAG, a.getTitle());
                                         movieList.add(a);
                                         Log.d(TAG, movieList.get(0).getTitle());
@@ -223,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Movie> call, Throwable t) {
+                                    public void onFailure(@NonNull Call<Movie> call, @NonNull Throwable t) {
                                         // Log error here since request failed
                                         Log.e(TAG, t.toString());
                                     }
@@ -250,18 +325,17 @@ public class MainActivity extends AppCompatActivity {
                         // MoviesList Callback
                         call.enqueue(new Callback<MoviesList>() {
                             @Override
-                            public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
+                            public void onResponse(@NonNull Call<MoviesList> call, @NonNull Response<MoviesList> response) {
+                                assert response.body() != null;
                                 List<Movie> a = response.body().getResults();
                                 moviesAdapter = new MoviesAdapter(getApplicationContext(), a);
                                 recyclerView.setAdapter(moviesAdapter);
                                 moviesAdapter.notifyDataSetChanged();
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
-                                }
+                                if (progressBar != null) progressBar.setVisibility(View.GONE);
                             }
 
                             @Override
-                            public void onFailure(Call<MoviesList> call, Throwable t) {
+                            public void onFailure(@NonNull Call<MoviesList> call, @NonNull Throwable t) {
                                 // Log error here since request failed
                                 Log.e(TAG, t.toString());
                             }

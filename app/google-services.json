@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "390864518108",
+    "firebase_url": "https://capstoneproject-ffa17.firebaseio.com",
+    "project_id": "capstoneproject-ffa17",
+    "storage_bucket": "capstoneproject-ffa17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390864518108:android:6dbbfb6c98421477",
+        "android_client_info": {
+          "package_name": "io.github.sudhansubarik.moviescentral"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390864518108-qtolbuquo0vlj4auv6a6ue5jnl22ji90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.sudhansubarik.moviescentral",
+            "certificate_hash": "3d7b7d25a4a9960480260a06e528019487826494"
+          }
+        },
+        {
+          "client_id": "390864518108-pb58tj2d50su0l0c006kock29oo9bmvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfqPxBw7FZ3J7BlEFmR45VsHwXfmCNfRU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390864518108-pb58tj2d50su0l0c006kock29oo9bmvl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

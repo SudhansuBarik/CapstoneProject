@@ -23,9 +23,55 @@
         <activity
             android:name=".activities.MovieDetailsActivity"
             android:parentActivityName=".activities.MainActivity" />
+
+        <activity
+            android:name=".firebase.LoginActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".firebase.ChangePasswordActivity"
+            android:label="Change Password" />
+        <activity
+            android:name=".firebase.ForgotPasswordActivity"
+            android:label="Forgot Password">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".firebase.LoginActivity" />
+        </activity>
+        <activity android:name=".firebase.CreateProfileActivity" />
+        <activity android:name=".firebase.RegisterAccountActivity" />
+        <activity
+            android:name=".firebase.ProfileActivity"
+            android:label="My Profile" />
+
         <activity
             android:name=".activities.MovieReviewsActivity"
             android:label="Reviews"
             android:theme="@style/Base.Theme.AppCompat.Dialog.MinWidth" />
+
+        <receiver android:name=".widget.MoviesAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/movies_app_widget_info" />
+        </receiver>
+
+        <!-- This meta-data tag is required to use Google Play Services. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4291607291269019~1772786521" />
+
+        <!-- Include the AdActivity configChanges and theme. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
     </application>
+
 </manifest>

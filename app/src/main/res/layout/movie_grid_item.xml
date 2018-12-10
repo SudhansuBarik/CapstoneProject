@@ -22,8 +22,8 @@
                 android:id="@+id/thumbnail_imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:focusable="true"
                 android:layout_gravity="center"
+                android:focusable="true"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
@@ -36,8 +36,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:paddingEnd="@dimen/eight_dp"
                     android:paddingStart="@dimen/eight_dp"
+                    android:paddingEnd="@dimen/eight_dp"
                     android:textColor="#000000"
                     android:textSize="@dimen/textSize_16"
                     android:textStyle="bold" />
@@ -48,8 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:paddingEnd="@dimen/eight_dp"
                     android:paddingStart="@dimen/eight_dp"
+                    android:paddingEnd="@dimen/eight_dp"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -62,8 +62,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:paddingEnd="@dimen/eight_dp"
                     android:paddingStart="@dimen/eight_dp"
+                    android:paddingEnd="@dimen/eight_dp"
                     android:textColor="#000000" />
             </RelativeLayout>
         </LinearLayout>
@@ -75,5 +75,4 @@
             android:layout_gravity="center"
             android:visibility="visible" />
     </android.support.v7.widget.CardView>
-
 </RelativeLayout>

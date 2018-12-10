@@ -1,7 +1,7 @@
 package io.github.sudhansubarik.moviescentral.adapters;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,24 +17,24 @@ import io.github.sudhansubarik.moviescentral.models.MoviesReviews;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
 
-    static List<MoviesReviews> reviews;
+    private static List<MoviesReviews> reviews;
     private int rowLayout;
-    private Context context;
 
     public ReviewsAdapter(List<MoviesReviews> reviews, int rowLayout, Context context) {
         ReviewsAdapter.reviews = reviews;
         this.rowLayout = rowLayout;
-        this.context = context;
+        Context context1 = context;
     }
 
+    @NonNull
     @Override
-    public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new ReviewViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ReviewViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ReviewViewHolder holder, final int position) {
         holder.movieTitle.setText(reviews.get(position).getAuthor());
         holder.movieSub.setText(reviews.get(position).getContent());
         holder.progressBar.setVisibility(View.GONE);
@@ -45,13 +45,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         return reviews.size();
     }
 
-    public static class ReviewViewHolder extends RecyclerView.ViewHolder {
+    static class ReviewViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout moviesLayout;
         TextView movieTitle;
         TextView movieSub;
         ProgressBar progressBar;
 
-        public ReviewViewHolder(View view) {
+        ReviewViewHolder(View view) {
             super(view);
             moviesLayout = view.findViewById(R.id.reviews_layout);
             movieTitle = view.findViewById(R.id.reviews_title);

@@ -2,12 +2,10 @@ package io.github.sudhansubarik.moviescentral.room;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
 @Entity
 public class DbMovies {
 
-    @NonNull
     @PrimaryKey
     private int movieId;
     private String movieName;
@@ -22,7 +20,7 @@ public class DbMovies {
     private double voteAverage;
     private int voteCount;
 
-    public DbMovies() {
+    DbMovies() {
     }
 
     public DbMovies(int id, String title, String originalTitle, String tagline, String overview,
@@ -46,7 +44,7 @@ public class DbMovies {
         return movieId;
     }
 
-    public void setMovieId(int movieId) {
+    void setMovieId(int movieId) {
         this.movieId = movieId;
     }
 
@@ -54,7 +52,7 @@ public class DbMovies {
         return movieName;
     }
 
-    public void setMovieName(String movieName) {
+    void setMovieName(String movieName) {
         this.movieName = movieName;
     }
 
@@ -62,7 +60,7 @@ public class DbMovies {
         return originalTitle;
     }
 
-    public void setOriginalTitle(String originalTitle) {
+    void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
     }
 
@@ -70,7 +68,7 @@ public class DbMovies {
         return tagline;
     }
 
-    public void setTagline(String tagline) {
+    void setTagline(String tagline) {
         this.tagline = tagline;
     }
 
@@ -86,7 +84,7 @@ public class DbMovies {
         return adult;
     }
 
-    public void setAdult(boolean adult) {
+    void setAdult(boolean adult) {
         this.adult = adult;
     }
 
@@ -94,7 +92,7 @@ public class DbMovies {
         return posterPath;
     }
 
-    public void setPosterPath(String posterPath) {
+    void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
 
@@ -102,7 +100,7 @@ public class DbMovies {
         return backdropPath;
     }
 
-    public void setBackdropPath(String backdropPath) {
+    void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
 
@@ -110,7 +108,7 @@ public class DbMovies {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -118,7 +116,7 @@ public class DbMovies {
         return video;
     }
 
-    public void setVideo(boolean video) {
+    void setVideo(boolean video) {
         this.video = video;
     }
 
@@ -126,7 +124,7 @@ public class DbMovies {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage) {
+    void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
@@ -134,7 +132,7 @@ public class DbMovies {
         return voteCount;
     }
 
-    public void setVoteCount(int voteCount) {
+    void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
 }

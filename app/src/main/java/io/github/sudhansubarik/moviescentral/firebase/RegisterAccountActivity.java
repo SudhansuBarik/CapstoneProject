@@ -24,8 +24,6 @@ import io.github.sudhansubarik.moviescentral.R;
 public class RegisterAccountActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
-    private Button registerButton;
-    private TextView loginLinkTextView;
     private CheckBox declarationCheckBox;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -47,8 +45,8 @@ public class RegisterAccountActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.register_password_editText);
         confirmPasswordEditText = findViewById(R.id.register_confirm_password_editText);
         declarationCheckBox = findViewById(R.id.register_declaration_checkBox);
-        loginLinkTextView = findViewById(R.id.register_login_link_textView);
-        registerButton = findViewById(R.id.register_button);
+        TextView loginLinkTextView = findViewById(R.id.register_login_link_textView);
+        Button registerButton = findViewById(R.id.register_button);
         progressBar = findViewById(R.id.profile_progressBar);
 
         loginLinkTextView.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +89,7 @@ public class RegisterAccountActivity extends AppCompatActivity {
                             .addOnCompleteListener(RegisterAccountActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    Toast.makeText(RegisterAccountActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(RegisterAccountActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                     // If sign in fails, display a message to the user. If sign in succeeds
                                     // the auth state listener will be notified and logic to handle the

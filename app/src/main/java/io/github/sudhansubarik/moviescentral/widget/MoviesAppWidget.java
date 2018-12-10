@@ -1,11 +1,19 @@
 package io.github.sudhansubarik.moviescentral.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
 import io.github.sudhansubarik.moviescentral.R;
+import io.github.sudhansubarik.moviescentral.activities.MainActivity;
+
+import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_KEY;
+import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_MOVIE;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,5 +49,24 @@ public class MoviesAppWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
-}
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.movies_app_widget);
+
+        Intent widgetPressIntent = new Intent(context, MainActivity.class);
+        PendingIntent buttonPressPendingIntent = PendingIntent.getActivity(context, 0, widgetPressIntent, 0);
+        views.setOnClickPendingIntent(R.id.widget_relativeLayout, buttonPressPendingIntent);
+
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
+
+        String movieString = sharedPref.getString(SHARED_PREF_KEY, "Not Found!");
+
+        views.setTextViewText(R.id.appwidget_text, movieString);
+
+        AppWidgetManager.getInstance(context).updateAppWidget(
+                new ComponentName(context, MoviesAppWidget.class), views);
+    }
+}

@@ -10,11 +10,14 @@ package io.github.sudhansubarik.moviescentral.activities;
  * https://stackoverflow.com/questions/41632590/clicking-cardview-instead-of-clicking-items-inside
  */
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -56,9 +59,13 @@ import io.github.sudhansubarik.moviescentral.models.MoviesViewModel;
 import io.github.sudhansubarik.moviescentral.room.DbMovies;
 import io.github.sudhansubarik.moviescentral.utils.Api;
 import io.github.sudhansubarik.moviescentral.utils.MoviesApiService;
+import io.github.sudhansubarik.moviescentral.widget.MoviesAppWidget;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_KEY;
+import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_MOVIE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -231,13 +238,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        recyclerViewState = manager.onSaveInstanceState();
-        outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
-    }
-
     private void myProfile() {
         if (user == null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -330,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
                                 List<Movie> a = response.body().getResults();
                                 moviesAdapter = new MoviesAdapter(getApplicationContext(), a);
                                 recyclerView.setAdapter(moviesAdapter);
+                                saveDataToSharedPrefs(movieList);
                                 moviesAdapter.notifyDataSetChanged();
                                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                             }
@@ -379,5 +380,57 @@ public class MainActivity extends AppCompatActivity {
             netInfo = cm.getActiveNetworkInfo();
         }
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        recyclerViewState = manager.onSaveInstanceState();
+        outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
+        }
+    }
+
+    public void saveDataToSharedPrefs(List<Movie> movieList) {
+
+        Intent intent = new Intent(getApplicationContext(), MoviesAppWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int[] ids = AppWidgetManager.getInstance(getApplicationContext())
+                .getAppWidgetIds(new ComponentName(getApplication(), MoviesAppWidget.class));
+
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        getApplication().sendBroadcast(intent);
+
+        StringBuilder builder = new StringBuilder();
+        int temp = 0;
+
+        for (int i = 0; i < movieList.size(); i++) {
+            if (movieList.get(i).getTitle() != null) {
+                temp++;
+                builder.append(temp)
+                        .append(". ")
+                        .append(movieList.get(i).getTitle())
+                        .append("          (")
+                        .append(movieList.get(i).getVoteAverage())
+                        .append(")\n");
+            }
+
+            if (temp == 5) {
+                break;
+            }
+        }
+
+        SharedPreferences sharedPref = getApplication().getSharedPreferences(SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(SHARED_PREF_KEY, builder.toString());
+        editor.apply();
     }
 }

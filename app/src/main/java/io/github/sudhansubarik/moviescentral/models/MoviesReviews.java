@@ -38,7 +38,7 @@ public class MoviesReviews implements Parcelable {
         this.url = url;
     }
 
-    protected MoviesReviews(Parcel in) {
+    private MoviesReviews(Parcel in) {
         id = in.readString();
         author = in.readString();
         content = in.readString();

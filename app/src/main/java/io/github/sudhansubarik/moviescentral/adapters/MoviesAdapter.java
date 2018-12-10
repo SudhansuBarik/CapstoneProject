@@ -1,5 +1,6 @@
 package io.github.sudhansubarik.moviescentral.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -24,34 +25,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private List<Movie> moviesList;
     private Context context;
 
-    public class MoviesViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView thumbnail;
-        TextView title;
-        TextView rating;
-        TextView year;
-        ProgressBar progressBar;
-
-        public MoviesViewHolder(View itemView) {
-            super(itemView);
-
-            thumbnail = itemView.findViewById(R.id.thumbnail_imageView);
-            title = itemView.findViewById(R.id.title_textView);
-            rating = itemView.findViewById(R.id.rating_textView);
-            year = itemView.findViewById(R.id.year_textView);
-            progressBar = itemView.findViewById(R.id.progressBar);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), MovieDetailsActivity.class);
-                    intent.putExtra("id", moviesList.get(getAdapterPosition()).getId());
-                    intent.putExtra("movie", moviesList.get(getAdapterPosition()));
-                    intent.putExtra("position", getAdapterPosition());
-                    v.getContext().startActivity(intent);
-                }
-            });
-        }
+    @NonNull
+    @Override
+    public MoviesAdapter.MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.movie_grid_item, parent, false);
+        return new MoviesViewHolder(view);
     }
 
     public MoviesAdapter(Context context, List<Movie> moviesList) {
@@ -59,15 +38,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         this.moviesList = moviesList;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public MoviesAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_grid_item, parent, false);
-        return new MoviesViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(final MoviesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MoviesViewHolder holder, int position) {
         String url = context.getResources().getString(R.string.base_tmdb_img_url) + "w185/" + moviesList.get(position).getPosterPath();
 
         Movie movie = moviesList.get(position);
@@ -89,6 +62,36 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             public void onError() {
             }
         });
+    }
+
+    class MoviesViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView thumbnail;
+        TextView title;
+        TextView rating;
+        TextView year;
+        ProgressBar progressBar;
+
+        MoviesViewHolder(View itemView) {
+            super(itemView);
+
+            thumbnail = itemView.findViewById(R.id.thumbnail_imageView);
+            title = itemView.findViewById(R.id.title_textView);
+            rating = itemView.findViewById(R.id.rating_textView);
+            year = itemView.findViewById(R.id.year_textView);
+            progressBar = itemView.findViewById(R.id.progressBar);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), MovieDetailsActivity.class);
+                    intent.putExtra("id", moviesList.get(getAdapterPosition()).getId());
+                    intent.putExtra("movie", moviesList.get(getAdapterPosition()));
+                    intent.putExtra("position", getAdapterPosition());
+                    v.getContext().startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override

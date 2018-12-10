@@ -143,7 +143,7 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
     }
 
-    protected Movie(Parcel in) {
+    private Movie(Parcel in) {
 
         title = in.readString();
         id = in.readInt();

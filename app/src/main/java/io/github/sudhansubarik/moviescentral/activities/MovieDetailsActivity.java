@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,10 +43,8 @@ import retrofit2.Response;
 public class MovieDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
-    private static String API_KEY;
 
     DbMovies dbMovies;
-    private int id;
     MoviesViewModel moviesViewModel;
 
     private ImageView thumbnailImageView;
@@ -111,7 +110,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             dbMovies.isVideo(),
                             dbMovies.getVoteAverage(),
                             dbMovies.getVoteCount());
-                } else {
                 }
             }
         }).start();
@@ -134,18 +132,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setMovieDetails() {
-        API_KEY = BuildConfig.ApiKey;
+        String API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid API Key", Toast.LENGTH_LONG).show();
             return;
         }
 
-        id = getIntent().getIntExtra("id", 0);
+        int id = getIntent().getIntExtra("id", 0);
         final MoviesApiService moviesApiService = Api.getClient().create(MoviesApiService.class);
         Call<Movie> call = moviesApiService.getMovieDetails(id, API_KEY);
         call.enqueue(new Callback<Movie>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
+            public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
                 movie = response.body();
 
                 // Set thumbnail
@@ -162,7 +161,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Movie> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<Movie> call, @NonNull Throwable throwable) {
                 // Log error here since request failed
                 Log.e(TAG, throwable.toString());
             }
@@ -172,8 +171,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         MoviesApiService moviesApiService1 = Api.getClient().create(MoviesApiService.class);
         Call<MoviesReviewsList> call1 = moviesApiService1.getMovieReviews(id, API_KEY);
         call1.enqueue(new Callback<MoviesReviewsList>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<MoviesReviewsList> call, Response<MoviesReviewsList> response) {
+            public void onResponse(@NonNull Call<MoviesReviewsList> call, @NonNull Response<MoviesReviewsList> response) {
+                assert response.body() != null;
                 reviews = response.body().getResults();
 
                 final int min = 0;
@@ -211,7 +212,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MoviesReviewsList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesReviewsList> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
@@ -224,13 +225,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Call<MoviesTrailersList> call2 = moviesApiService2.getMovieVideos(id, API_KEY);
         call2.enqueue(new Callback<MoviesTrailersList>() {
             @Override
-            public void onResponse(Call<MoviesTrailersList> call, Response<MoviesTrailersList> response) {
+            public void onResponse(@NonNull Call<MoviesTrailersList> call, @NonNull Response<MoviesTrailersList> response) {
+                assert response.body() != null;
                 List<MoviesTrailers> list = response.body().getResults();
                 recyclerViewTrailers.setAdapter(new TrailersAdapter(list, R.layout.item_trailers, getApplicationContext()));
             }
 
             @Override
-            public void onFailure(Call<MoviesTrailersList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesTrailersList> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }

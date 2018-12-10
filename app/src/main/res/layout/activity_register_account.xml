@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
-            android:text="Create Account"
+            android:text="@string/create_account"
             android:textColor="#000000"
             android:textSize="32sp" />
 
@@ -30,11 +30,12 @@
             android:layout_gravity="center"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="10dp"
-            android:hint="Email Address"
+            android:hint="@string/email_address"
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/register_password_editText"
@@ -43,11 +44,12 @@
             android:layout_gravity="center"
             android:drawableStart="@drawable/ic_key"
             android:drawablePadding="10dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/register_confirm_password_editText"
@@ -56,18 +58,19 @@
             android:layout_gravity="center"
             android:drawableStart="@drawable/ic_confirm_password"
             android:drawablePadding="10dp"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password"
             android:inputType="textPassword"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
 
         <CheckBox
             android:id="@+id/register_declaration_checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="By clicking Register you agree to all the Terms and Privacy Policy of Movies Central."
+            android:text="@string/by_clicking_register_you_agree_to_all_the_terms_and_privacy_policy_of_movies_central"
             android:textSize="12sp" />
 
         <Button
@@ -76,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="#3F51B5"
-            android:text="Register"
+            android:text="@string/register"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="18sp" />
@@ -88,7 +91,7 @@
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:text="Already have an account? Login here."
+            android:text="@string/login_here"
             android:textColor="#000000"
             android:textSize="14sp" />
 

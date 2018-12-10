@@ -96,20 +96,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 // Check Movie added in favourite
                 if (dbMovies != null) {
                     isFavorite = true; // set Favourite true
-                    Log.d(TAG, "Database: " + movie1.getPosterPath() + " > " + dbMovies.getPosterPath() + " " + isFavorite);
-                    Movie movie = new Movie(
-                            dbMovies.getMovieId(),
-                            dbMovies.getMovieName(),
-                            dbMovies.getOriginalTitle(),
-                            dbMovies.getTagline(),
-                            dbMovies.getOverview(),
-                            dbMovies.isAdult(),
-                            dbMovies.getPosterPath(),
-                            dbMovies.getBackdropPath(),
-                            dbMovies.getReleaseDate(),
-                            dbMovies.isVideo(),
-                            dbMovies.getVoteAverage(),
-                            dbMovies.getVoteCount());
                 }
             }
         }).start();

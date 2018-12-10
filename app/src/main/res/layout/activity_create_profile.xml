@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
-            android:text="Enter Profile Information"
+            android:text="@string/enter_profile_information"
             android:textColor="#000000"
             android:textSize="32sp" />
 
@@ -30,10 +30,12 @@
             android:layout_gravity="center"
             android:drawableStart="@drawable/ic_account"
             android:drawablePadding="10dp"
-            android:hint="Name"
+            android:hint="@string/name"
+            android:inputType="text"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/create_profile_mobile_editText"
@@ -42,11 +44,12 @@
             android:layout_gravity="center"
             android:drawableStart="@drawable/ic_call"
             android:drawablePadding="10dp"
-            android:hint="Mobile Number"
+            android:hint="@string/mobile_number"
             android:inputType="phone"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
 
         <Button
             android:id="@+id/save_profile_button"
@@ -55,7 +58,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:background="#3F51B5"
-            android:text="Save Profile"
+            android:text="@string/save_profile"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="16sp" />

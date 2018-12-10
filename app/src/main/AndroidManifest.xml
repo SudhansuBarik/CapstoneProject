@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,9 +27,6 @@
         <activity
             android:name=".firebase.LoginActivity"
             android:parentActivityName=".activities.MainActivity" />
-        <activity
-            android:name=".firebase.ChangePasswordActivity"
-            android:label="Change Password" />
         <activity
             android:name=".firebase.ForgotPasswordActivity"
             android:label="Forgot Password">

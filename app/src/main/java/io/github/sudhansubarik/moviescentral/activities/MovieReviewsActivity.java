@@ -1,8 +1,8 @@
 package io.github.sudhansubarik.moviescentral.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +36,7 @@ public class MovieReviewsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         reviews = intent.getParcelableArrayListExtra("reviews");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(new ReviewsAdapter(reviews, R.layout.item_review, getApplicationContext()));
+        recyclerView.setAdapter(new ReviewsAdapter(reviews, R.layout.item_review));
         Log.d(TAG, "\nParcel Received: \n" + "getAuthor() > " + reviews.get(0).getAuthor() + " \nsize() > " + reviews.size());
         progressBar.setVisibility(View.GONE);
     }

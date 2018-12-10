@@ -19,7 +19,6 @@ import io.github.sudhansubarik.moviescentral.R;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText emailEditText;
-    private Button submitButton;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
 
@@ -29,7 +28,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forgot_password);
 
         emailEditText = findViewById(R.id.forgot_pass_email_editText);
-        submitButton = findViewById(R.id.forgot_pass_submit_button);
+        Button submitButton = findViewById(R.id.forgot_pass_submit_button);
         progressBar = findViewById(R.id.profile_progressBar);
 
         auth = FirebaseAuth.getInstance();

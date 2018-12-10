@@ -1,6 +1,5 @@
 package io.github.sudhansubarik.moviescentral.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,10 +19,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     private static List<MoviesReviews> reviews;
     private int rowLayout;
 
-    public ReviewsAdapter(List<MoviesReviews> reviews, int rowLayout, Context context) {
+    public ReviewsAdapter(List<MoviesReviews> reviews, int rowLayout) {
         ReviewsAdapter.reviews = reviews;
         this.rowLayout = rowLayout;
-        Context context1 = context;
     }
 
     @NonNull

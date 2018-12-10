@@ -58,14 +58,12 @@ import io.github.sudhansubarik.moviescentral.models.MoviesList;
 import io.github.sudhansubarik.moviescentral.models.MoviesViewModel;
 import io.github.sudhansubarik.moviescentral.room.DbMovies;
 import io.github.sudhansubarik.moviescentral.utils.Api;
+import io.github.sudhansubarik.moviescentral.utils.Constants;
 import io.github.sudhansubarik.moviescentral.utils.MoviesApiService;
 import io.github.sudhansubarik.moviescentral.widget.MoviesAppWidget;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_KEY;
-import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_MOVIE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -327,10 +325,10 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(@NonNull Call<MoviesList> call, @NonNull Response<MoviesList> response) {
                                 assert response.body() != null;
-                                List<Movie> a = response.body().getResults();
-                                moviesAdapter = new MoviesAdapter(getApplicationContext(), a);
+                                List<Movie> movieList2 = response.body().getResults();
+                                moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList2);
                                 recyclerView.setAdapter(moviesAdapter);
-                                saveDataToSharedPrefs(movieList);
+                                saveDataToSharedPrefs(movieList2);
                                 moviesAdapter.notifyDataSetChanged();
                                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                             }
@@ -418,19 +416,17 @@ public class MainActivity extends AppCompatActivity {
                 builder.append(temp)
                         .append(". ")
                         .append(movieList.get(i).getTitle())
-                        .append("          (")
-                        .append(movieList.get(i).getVoteAverage())
-                        .append(")\n");
+                        .append("\n");
             }
 
-            if (temp == 5) {
+            if (temp == 7) {
                 break;
             }
         }
 
-        SharedPreferences sharedPref = getApplication().getSharedPreferences(SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getApplication().getSharedPreferences(Constants.SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(SHARED_PREF_KEY, builder.toString());
+        editor.putString(Constants.SHARED_PREF_KEY, builder.toString());
         editor.apply();
     }
 }

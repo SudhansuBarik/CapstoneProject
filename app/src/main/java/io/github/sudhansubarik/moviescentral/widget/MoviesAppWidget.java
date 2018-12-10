@@ -11,9 +11,7 @@ import android.widget.RemoteViews;
 
 import io.github.sudhansubarik.moviescentral.R;
 import io.github.sudhansubarik.moviescentral.activities.MainActivity;
-
-import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_KEY;
-import static io.github.sudhansubarik.moviescentral.utils.Constants.SHARED_PREF_MOVIE;
+import io.github.sudhansubarik.moviescentral.utils.Constants;
 
 /**
  * Implementation of App Widget functionality.
@@ -60,9 +58,9 @@ public class MoviesAppWidget extends AppWidgetProvider {
         PendingIntent buttonPressPendingIntent = PendingIntent.getActivity(context, 0, widgetPressIntent, 0);
         views.setOnClickPendingIntent(R.id.widget_relativeLayout, buttonPressPendingIntent);
 
-        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
 
-        String movieString = sharedPref.getString(SHARED_PREF_KEY, "Not Found!");
+        String movieString = sharedPref.getString(Constants.SHARED_PREF_KEY, "Not Found!");
 
         views.setTextViewText(R.id.appwidget_text, movieString);
 

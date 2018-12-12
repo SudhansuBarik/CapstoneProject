@@ -33,7 +33,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -73,10 +72,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner filterSpinner;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    public static final String LIFECYCLE_CALLBACK_MOVIE_LIST = "movie_list";
     Boolean doubleBackToExitPressedOnce = false;
-    Boolean isScrolling = false;
-    int currentItems, totalItems, scrollOutItems, movieRequestType = 1;
+    private static long currentVisiblePosition;
     GridLayoutManager manager;
     List<Movie> movieList = new ArrayList<>();
     List<DbMovies> dbMoviesList = new ArrayList<>();
@@ -87,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+    int movieRequestType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,39 +143,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (movieRequestType != 3) {
-                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                        isScrolling = true;
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (movieRequestType != 3) {
-                    currentItems = manager.getChildCount();
-
-                    totalItems = manager.getItemCount();
-                    scrollOutItems = manager.findFirstVisibleItemPosition();
-                }
-            }
-        });
-
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(LIFECYCLE_CALLBACK_MOVIE_LIST)) {
-                movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
-                manager.onRestoreInstanceState(recyclerViewState);
-            }
-        }
+//        if (savedInstanceState != null) {
+//            if (savedInstanceState.containsKey(LIFECYCLE_CALLBACK_MOVIE_LIST)) {
+//                movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
+//                manager.onRestoreInstanceState(recyclerViewState);
+//            }
+//        }
 
         new Thread(new Runnable() {
             @Override
@@ -205,7 +179,14 @@ public class MainActivity extends AppCompatActivity {
 
         }).start();
 
-        loadMovies();
+        if (savedInstanceState == null) {
+            loadMovies();
+        } else {
+            recyclerViewState = savedInstanceState.getParcelable("position");
+            if (recyclerViewState != null) {
+                manager.onRestoreInstanceState(recyclerViewState);
+            }
+        }
 
         // Ads
         AdView adView = findViewById(R.id.adView);
@@ -234,32 +215,6 @@ public class MainActivity extends AppCompatActivity {
             myProfile();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void myProfile() {
-        if (user == null) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Info");
-            builder.setMessage("Please Login to continue");
-            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    auth.signOut();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-        }
     }
 
     public void loadMovies() {
@@ -347,52 +302,53 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Double Back Press to Exit
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click Back again to Exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-    }
-
-    /*
-        Network changing:
-            https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
-     */
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = null;
-        if (cm != null) {
-            netInfo = cm.getActiveNetworkInfo();
-        }
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         recyclerViewState = manager.onSaveInstanceState();
-        outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
+//        outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
+        outState.putParcelable("position", recyclerViewState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
+    protected void onResume() {
+        super.onResume();
+        if (recyclerViewState != null) {
+            manager.onRestoreInstanceState(recyclerViewState);
+        }
+    }
+
+    //    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        if (savedInstanceState != null) {
+//            movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
+//        }
+//    }
+
+    private void myProfile() {
+        if (user == null) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Info");
+            builder.setMessage("Please Login to continue");
+            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    auth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -429,4 +385,38 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(Constants.SHARED_PREF_KEY, builder.toString());
         editor.apply();
     }
+
+    // Double Back Press to Exit
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Click Back again to Exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+    /*
+        Network changing:
+            https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+     */
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = null;
+        if (cm != null) {
+            netInfo = cm.getActiveNetworkInfo();
+        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
 }

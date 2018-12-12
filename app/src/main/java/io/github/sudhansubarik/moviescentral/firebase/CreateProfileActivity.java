@@ -123,6 +123,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         UserInformation userInformation = new UserInformation(name, email, mobile);
         assert user != null;
         databaseReference.child(user.getUid()).setValue(userInformation);
-        Toast.makeText(this, "Profile created successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Profile information saved successfully", Toast.LENGTH_SHORT).show();
     }
 }

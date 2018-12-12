@@ -2,7 +2,10 @@ package io.github.sudhansubarik.moviescentral.firebase;
 
 class UserInformation {
 
-    String name, email, mobile;
+    public String name, email, mobile;
+
+    UserInformation() {
+    }
 
     UserInformation(String name, String email, String mobile) {
         this.name = name;

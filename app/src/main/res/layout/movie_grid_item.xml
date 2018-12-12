@@ -27,7 +27,8 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/movie_thumbnail"
                 android:focusable="true"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:transitionName="img" />
 
             <LinearLayout
                 android:layout_width="match_parent"

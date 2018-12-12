@@ -45,7 +45,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
         holder.trailerTitle.setText(trailers.get(holder.getAdapterPosition()).getName());
         holder.trailerSub.setText(trailers.get(holder.getAdapterPosition()).getSite());
-        Picasso.with(context).load(url).error(R.drawable.error).into(holder.trailerImageView, new com.squareup.picasso.Callback() {
+        Picasso.get().load(url).error(R.drawable.error).into(holder.trailerImageView, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
                 if (holder.progressBar != null) {
@@ -54,7 +54,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
             }
 
             @Override
-            public void onError() {
+            public void onError(Exception e) {
 
             }
         });

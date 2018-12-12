@@ -13,7 +13,7 @@
         android:drawableStart="@mipmap/ic_launcher"
         android:gravity="center"
         android:padding="@dimen/widget_padding"
-        android:text="@string/top_7_popular_movies"
+        android:text="@string/widget_layout_heading"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold" />

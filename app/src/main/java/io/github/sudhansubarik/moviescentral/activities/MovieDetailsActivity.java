@@ -48,8 +48,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     MoviesViewModel moviesViewModel;
 
     private ImageView thumbnailImageView;
-    List<MoviesReviews> reviews = new ArrayList<>();
-    private Movie movie1 = new Movie(), movie;
+    List<MoviesReviews> reviews;
+    private Movie movie1, movie;
     private Boolean isFavorite = false;
     private TextView titleTextView, ratingTextView, releaseDateTextView, overviewTextView, reviewsCommentsTextView, moreTextView;
     private CheckBox checkBox;
@@ -60,6 +60,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_movie_details);
+
+        reviews = new ArrayList<>();
+        movie1 = new Movie();
 
         thumbnailImageView = findViewById(R.id.thumbnail_imageView);
         titleTextView = findViewById(R.id.title_textView);
@@ -131,11 +134,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
-                movie = response.body();
+//                movie = response.body();
 
+                movie = getIntent().getParcelableExtra("movie");
                 // Set thumbnail
-                Picasso.with(MovieDetailsActivity.this).load(getResources().getString(R.string.base_tmdb_img_url) + "w342/"
-                        + movie.getPosterPath()).into(thumbnailImageView);
+                Picasso.get().load(getResources()
+                        .getString(R.string.base_tmdb_img_url) + "w342/" + movie.getPosterPath())
+                        .into(thumbnailImageView);
                 // Set title
                 titleTextView.setText(movie.getTitle());
                 // Set Release Date
@@ -160,7 +165,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<MoviesReviewsList> call, @NonNull Response<MoviesReviewsList> response) {
-                assert response.body() != null;
                 reviews = response.body().getResults();
 
                 final int min = 0;
@@ -181,7 +185,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                                 Log.v(TAG, r + " >> " + rev);
                                 final int finalR = r;
                                 runOnUiThread(new Runnable() {
-                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void run() {
                                         moreTextView.setText("More " + (max - 1));
@@ -212,7 +215,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         call2.enqueue(new Callback<MoviesTrailersList>() {
             @Override
             public void onResponse(@NonNull Call<MoviesTrailersList> call, @NonNull Response<MoviesTrailersList> response) {
-                assert response.body() != null;
                 List<MoviesTrailers> list = response.body().getResults();
                 recyclerViewTrailers.setAdapter(new TrailersAdapter(list, R.layout.item_trailers, getApplicationContext()));
             }

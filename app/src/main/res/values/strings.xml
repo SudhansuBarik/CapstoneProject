@@ -18,13 +18,19 @@
     <string name="appwidget_text">Movies and Reviews</string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
     <string name="trailer_thumbnail_image">Trailer Thumbnail Image</string>
+    <string name="no_fav_movie">No Favourite movies</string>
+    <string name="invalid_api_key">Invalid API Key</string>
+    <string name="spinner_popular">Popular</string>
+    <string name="spinner_top_rated">Top Rated</string>
+    <string name="spinner__favorites">Favorites</string>
+    <string name="check_internet_connection">Please check your Internet Connection and try again!</string>
 
     <!--AdMob Banner Ad test ID-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!--Widget-->
     <string name="add_widget">Add widget</string>
-    <string name="top_7_popular_movies">Top 7 Popular Movies</string>
+    <string name="widget_layout_heading">Movies Central</string>
     <string name="widget_title_separator">Widget Title Separator</string>
 
     <!--Login and Register-->
@@ -54,4 +60,6 @@
     <string name="name">Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="save_profile">Save Profile</string>
+
+
 </resources>

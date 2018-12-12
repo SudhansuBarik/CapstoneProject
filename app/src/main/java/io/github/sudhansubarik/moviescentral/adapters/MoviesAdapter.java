@@ -1,9 +1,12 @@
 package io.github.sudhansubarik.moviescentral.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     private List<Movie> moviesList;
     private Context context;
+    private Activity activity;
 
     @NonNull
     @Override
@@ -33,14 +37,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         return new MoviesViewHolder(view);
     }
 
-    public MoviesAdapter(Context context, List<Movie> moviesList) {
+    public MoviesAdapter(Context context, List<Movie> moviesList, Activity activity) {
         this.context = context;
         this.moviesList = moviesList;
+        this.activity = activity;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final MoviesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MoviesViewHolder holder, final int position) {
         String url = context.getResources().getString(R.string.base_tmdb_img_url) + "w185/" + moviesList.get(position).getPosterPath();
 
         Movie movie = moviesList.get(position);
@@ -49,7 +54,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         holder.rating.setText(movie.getVoteAverage() + "");
 
         // In picasso:2.71828 :::: Picasso.get().load(url).into(holder.thumbnail, new com.squareup.picasso.Callback()
-        Picasso.with(context).load(url).into(holder.thumbnail, new com.squareup.picasso.Callback() {
+        Picasso.get().load(url).into(holder.thumbnail, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
                 if (holder.progressBar != null) {
@@ -59,7 +64,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
             // picasso:2.71828 :: public void onError(Exception e)
             @Override
-            public void onError() {
+            public void onError(Exception e) {
+            }
+        });
+
+        // Passing all data to the detail activity through Intent
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra("movie", moviesList.get(position));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                        holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
+                context.startActivity(intent, options.toBundle());
             }
         });
     }

@@ -9,6 +9,7 @@
         <item name="cardViewStyle">@style/CardView</item>
         <item name="actionBarStyle">@style/MoviesCentralAppBarStyle</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="MoviesCentralAppBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">

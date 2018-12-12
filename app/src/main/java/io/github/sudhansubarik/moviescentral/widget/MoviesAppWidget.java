@@ -60,7 +60,7 @@ public class MoviesAppWidget extends AppWidgetProvider {
 
         SharedPreferences sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
 
-        String movieString = sharedPref.getString(Constants.SHARED_PREF_KEY, "Not Found!");
+        String movieString = sharedPref.getString(Constants.SHARED_PREF_MOVIE_LIST, "");
 
         views.setTextViewText(R.id.appwidget_text, movieString);
 

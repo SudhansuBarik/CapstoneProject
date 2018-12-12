@@ -37,7 +37,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/contentDescription"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:transitionName="img" />
 
             <View
                 android:layout_width="2dp"

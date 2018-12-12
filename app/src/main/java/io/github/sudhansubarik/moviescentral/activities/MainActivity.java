@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -86,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     int movieRequestType = 1;
 
+    StringBuilder builder;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Invalid API Key", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.invalid_api_key), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         // Spinner dropdown elements
-        String[] filter = {"Popular", "Top Rated", "Favorites"};
+        String[] filter = {getString(R.string.spinner_popular), getString(R.string.spinner_top_rated), getString(R.string.spinner__favorites)};
         // Creating adapter for spinner
         dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
         // Drop down layout style - list view with radio button
@@ -146,13 +151,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        if (savedInstanceState != null) {
-//            if (savedInstanceState.containsKey(LIFECYCLE_CALLBACK_MOVIE_LIST)) {
-//                movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
-//                manager.onRestoreInstanceState(recyclerViewState);
-//            }
-//        }
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -179,13 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
         }).start();
 
-        if (savedInstanceState == null) {
-            loadMovies();
-        } else {
-            recyclerViewState = savedInstanceState.getParcelable("position");
-            if (recyclerViewState != null) {
-                manager.onRestoreInstanceState(recyclerViewState);
-            }
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList("data_key");
+            recyclerViewState = savedInstanceState.getParcelable("state_key");
         }
 
         // Ads
@@ -242,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d(TAG, movieList.get(0).getTitle());
                                         if (dbMoviesList.size() == dbMoviesList.size()) {
                                             Log.e(TAG, movieList.size() + " size");
-                                            moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList);
+                                            moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList, MainActivity.this);
                                             recyclerView.setAdapter(moviesAdapter);
                                         }
                                         if (progressBar != null) {
@@ -262,8 +256,7 @@ public class MainActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                             }
                             recyclerView.setAdapter(null);
-//                            filterSpinner.setSelection(dataAdapter.getPosition("Popular"));
-                            Toast.makeText(MainActivity.this, "No Favourite movies", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.no_fav_movie), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Call<MoviesList> call = apiService.getPopularMovies(API_KEY);
@@ -281,9 +274,14 @@ public class MainActivity extends AppCompatActivity {
                             public void onResponse(@NonNull Call<MoviesList> call, @NonNull Response<MoviesList> response) {
                                 assert response.body() != null;
                                 List<Movie> movieList2 = response.body().getResults();
-                                moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList2);
+                                moviesAdapter = new MoviesAdapter(getApplicationContext(), movieList2, MainActivity.this);
                                 recyclerView.setAdapter(moviesAdapter);
-                                saveDataToSharedPrefs(movieList2);
+
+                                String[] movieName = new String[5];
+                                for (int i = 0; i < 5; i++)
+                                    movieName[i] = movieList2.get(i).getTitle();
+                                saveDataToSharedPrefs(movieName);
+
                                 moviesAdapter.notifyDataSetChanged();
                                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                             }
@@ -298,33 +296,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(this, "Please check your Internet Connection and try again!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.check_internet_connection), Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        recyclerViewState = manager.onSaveInstanceState();
-//        outState.putParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST, (ArrayList<? extends Parcelable>) movieList);
-        outState.putParcelable("position", recyclerViewState);
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("data_key", (ArrayList<Movie>) movieList);
+        recyclerViewState = manager.onSaveInstanceState();
+        outState.putParcelable("state_key", recyclerViewState);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (recyclerViewState != null) {
-            manager.onRestoreInstanceState(recyclerViewState);
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList("data_key");
+            recyclerViewState = savedInstanceState.getParcelable("state_key");
         }
     }
-
-    //    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        if (savedInstanceState != null) {
-//            movieList = savedInstanceState.getParcelableArrayList(LIFECYCLE_CALLBACK_MOVIE_LIST);
-//        }
-//    }
 
     private void myProfile() {
         if (user == null) {
@@ -352,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveDataToSharedPrefs(List<Movie> movieList) {
+    public void saveDataToSharedPrefs(String[] prefMovies) {
 
         Intent intent = new Intent(getApplicationContext(), MoviesAppWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -363,27 +354,37 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         getApplication().sendBroadcast(intent);
 
-        StringBuilder builder = new StringBuilder();
-        int temp = 0;
+        new MoviesAsyncTask().execute(prefMovies);
+    }
 
-        for (int i = 0; i < movieList.size(); i++) {
-            if (movieList.get(i).getTitle() != null) {
-                temp++;
-                builder.append(temp)
-                        .append(". ")
-                        .append(movieList.get(i).getTitle())
-                        .append("\n");
+    private class MoviesAsyncTask extends AsyncTask<String[], Void, Void> {
+
+        @Override
+        protected Void doInBackground(String[]... asyncMovie) {
+            builder = new StringBuilder();
+
+            int temp = 0;
+
+            for (int i = 0; i < asyncMovie.length; i++) {
+                if (asyncMovie[i] != null) {
+                    temp++;
+                    builder.append(temp)
+                            .append(". ")
+                            .append(asyncMovie[i])
+                            .append("\n");
+                }
+                if (temp == 3) {
+                    break;
+                }
             }
 
-            if (temp == 7) {
-                break;
-            }
+            sharedPref = getApplication().getSharedPreferences(Constants.SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
+            editor = sharedPref.edit();
+            editor.putString(Constants.SHARED_PREF_MOVIE_LIST, builder.toString());
+            editor.apply();
+
+            return null;
         }
-
-        SharedPreferences sharedPref = getApplication().getSharedPreferences(Constants.SHARED_PREF_MOVIE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.SHARED_PREF_KEY, builder.toString());
-        editor.apply();
     }
 
     // Double Back Press to Exit

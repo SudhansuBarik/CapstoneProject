@@ -67,21 +67,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             public void onError(Exception e) {
             }
         });
-
-        // Passing all data to the detail activity through Intent
-//        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, MovieDetailsActivity.class);
-//                intent.putExtra("id", moviesList.get(position).getId());
-//                intent.putExtra("movie", moviesList.get(position));
-//                intent.putExtra("position", position);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-//                        holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
-//                context.startActivity(intent, options.toBundle());
-//            }
-//        });
     }
 
     class MoviesViewHolder extends RecyclerView.ViewHolder {

@@ -88,7 +88,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     intent.putParcelableArrayListExtra("reviews", (ArrayList<MoviesReviews>) reviews);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MovieDetailsActivity.this, "No Reviews", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MovieDetailsActivity.this, getString(R.string.no_reviews), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -123,7 +123,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private void setMovieDetails() {
         String API_KEY = BuildConfig.ApiKey;
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Invalid API Key", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.invalid_api_key, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -136,7 +136,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
                 movie = response.body();
 
-//                movie = getIntent().getParcelableExtra("movie");
                 // Set thumbnail
                 Picasso.get().load(getResources()
                         .getString(R.string.base_tmdb_img_url) + "w342/" + movie.getPosterPath())
@@ -187,7 +186,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        moreTextView.setText("More " + (max - 1));
+                                        moreTextView.setText(getString(R.string.more) + (max - 1));
                                         reviewsCommentsTextView.setText(reviews.get(finalR).getAuthor() + ": " + reviews.get(finalR).getContent());
                                     }
                                 });
@@ -243,7 +242,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             checkBox.setText(R.string.add_to_favorites);
-                            Toast.makeText(MovieDetailsActivity.this, "Removed from Favourites", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MovieDetailsActivity.this, getString(R.string.removed_from_favorites), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -263,7 +262,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             checkBox.setText(R.string.remove_from_favorites);
-                            Toast.makeText(MovieDetailsActivity.this, "Added to Favourites", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MovieDetailsActivity.this, getString(R.string.added_to_favorites), Toast.LENGTH_LONG).show();
                         }
                     });
                 }

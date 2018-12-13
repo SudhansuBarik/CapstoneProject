@@ -151,10 +151,10 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(ProfileActivity.this, "Reset password email is sent!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, getString(R.string.reset_password_email_sent), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             } else {
-                                Toast.makeText(ProfileActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, getString(R.string.reset_password_email_failed), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             }
                         }
@@ -164,18 +164,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setLogout() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-        builder.setTitle("Info");
-        builder.setMessage("Do you want to logout ??");
-        builder.setPositiveButton("Take me away!", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.info);
+        builder.setMessage(R.string.do_you_want_to_logout);
+        builder.setPositiveButton(R.string.take_me_away, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 auth.signOut();
                 startActivity(new Intent(ProfileActivity.this, MainActivity.class));
-                Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, getString(R.string.logged_out_successfully), Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.not_now, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

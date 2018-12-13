@@ -13,7 +13,9 @@
     <string name="popular_movies">Popular Movies</string>
     <string name="top_rated_movies">Top Rated Movies</string>
     <string name="add_to_favorites">Add to Favorites</string>
+    <string name="added_to_favorites">Added to Favourites</string>
     <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="removed_from_favorites">Removed from Favourites</string>
     <string name="no_reviews">No Reviews</string>
     <string name="appwidget_text">Movies and Reviews</string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
@@ -24,6 +26,8 @@
     <string name="spinner_top_rated">Top Rated</string>
     <string name="spinner__favorites">Favorites</string>
     <string name="check_internet_connection">Please check your Internet Connection and try again!</string>
+    <string name="click_back_again">Click Back again to Exit</string>
+    <string name="more">More</string>
 
     <!--AdMob Banner Ad test ID-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
@@ -40,6 +44,7 @@
     <string name="hide_password">Hide Password</string>
     <string name="show_password">Show Password</string>
     <string name="logout">Logout</string>
+    <string name="login">Login</string>
     <string name="change_password">Change Password</string>
     <string name="create_account">Create Account</string>
     <string name="email_address">Email Address</string>
@@ -53,13 +58,31 @@
     <string name="profile_email_id">Email ID: </string>
     <string name="profile_name">Name: </string>
     <string name="not_a_member_yet_sign_up_here">Not a Member yet? Sign Up here.</string>
-    <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="please_enter_the_email_address_associated_with_your_movies_central_account">Please enter the email address associated with your Movies Central account.</string>
     <string name="enter_profile_information">Enter Profile Information</string>
     <string name="name">Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="save_profile">Save Profile</string>
-
-
+    <string name="info">Info</string>
+    <string name="login_to_continue">Please Login to continue</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_enter_name">Please enter your Name</string>
+    <string name="plaese_enter_mobile_number">Please enter your Mobile Number</string>
+    <string name="profile_info_saved">Profile information saved successfully</string>
+    <string name="enter_registered_email">Enter your registered Email ID</string>
+    <string name="password_reset_instructions_sent">We have sent you instructions to reset your password!</string>
+    <string name="enter_valid_email_id">Please enter a valid Email ID!</string>
+    <string name="enter_email">Enter email address!</string>
+    <string name="enter_password">Enter password!</string>
+    <string name="reset_password_email_sent">Reset password email is sent!</string>
+    <string name="reset_password_email_failed">Failed to send reset email!</string>
+    <string name="do_you_want_to_logout">Do you want to logout ??</string>
+    <string name="take_me_away">Take me away!</string>
+    <string name="logged_out_successfully">Logged out successfully</string>
+    <string name="not_now">Not now</string>
+    <string name="password_too_short">Password too short, enter minimum 6 characters!</string>
+    <string name="passwords_do_not_match">Passwords do not match.</string>
+    <string name="accept_terms_and_policy">Please accept the Terms and Privacy Policy.</string>
+    <string name="registration_failed">Registration failed.</string>
 </resources>

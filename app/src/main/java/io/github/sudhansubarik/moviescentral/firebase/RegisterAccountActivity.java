@@ -65,23 +65,23 @@ public class RegisterAccountActivity extends AppCompatActivity {
                 String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
                 }
                 // Check if password field is populated
                 else if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_password, Toast.LENGTH_SHORT).show();
                 }
                 // Check if password entered is minimum 6 characters long
                 else if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.password_too_short), Toast.LENGTH_SHORT).show();
                 }
                 // Check if both passwords are equal
                 else if (!password.equals(confirmPassword)) {
-                    Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.passwords_do_not_match), Toast.LENGTH_SHORT).show();
                 }
                 // Make sure user should check the declaration checkbox
                 else if (!declarationCheckBox.isChecked()) {
-                    Toast.makeText(getApplicationContext(), "Please accept the Terms and Privacy Policy.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.accept_terms_and_policy), Toast.LENGTH_SHORT).show();
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
                     //create user
@@ -95,7 +95,7 @@ public class RegisterAccountActivity extends AppCompatActivity {
                                     // the auth state listener will be notified and logic to handle the
                                     // signed in user can be handled in the listener.
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(RegisterAccountActivity.this, "Authentication failed." + task.getException(),
+                                        Toast.makeText(RegisterAccountActivity.this, getString(R.string.registration_failed) + task.getException(),
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
                                         startActivity(new Intent(RegisterAccountActivity.this, CreateProfileActivity.class));

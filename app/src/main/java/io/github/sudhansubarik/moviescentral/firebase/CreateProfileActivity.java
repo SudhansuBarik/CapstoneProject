@@ -97,9 +97,9 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                 // If any field doesn't have a response then create a toast to prompt the user to enter value
                 if (name.equals("")) {
-                    Toast.makeText(CreateProfileActivity.this, "Please enter your Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateProfileActivity.this, getString(R.string.please_enter_name), Toast.LENGTH_SHORT).show();
                 } else if (mobile.equals("")) {
-                    Toast.makeText(CreateProfileActivity.this, "Please enter your Mobile Number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateProfileActivity.this, getString(R.string.plaese_enter_mobile_number), Toast.LENGTH_SHORT).show();
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
                     saveUserInformation();
@@ -123,6 +123,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         UserInformation userInformation = new UserInformation(name, email, mobile);
         assert user != null;
         databaseReference.child(user.getUid()).setValue(userInformation);
-        Toast.makeText(this, "Profile information saved successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.profile_info_saved), Toast.LENGTH_SHORT).show();
     }
 }

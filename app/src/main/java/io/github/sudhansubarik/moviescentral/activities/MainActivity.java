@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ProgressBar progressBar;
     Boolean doubleBackToExitPressedOnce = false;
-    private static long currentVisiblePosition;
     GridLayoutManager manager;
     List<Movie> movieList = new ArrayList<>();
     List<DbMovies> dbMoviesList = new ArrayList<>();
@@ -178,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         if (savedInstanceState != null) {
-            movieList = savedInstanceState.getParcelableArrayList("data_key");
-            recyclerViewState = savedInstanceState.getParcelable("state_key");
+            movieList = savedInstanceState.getParcelableArrayList(Constants.DATA_KEY);
+            recyclerViewState = savedInstanceState.getParcelable(Constants.STATE_KEY);
         }
 
         // Ads
@@ -303,33 +302,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("data_key", (ArrayList<Movie>) movieList);
+        outState.putParcelableArrayList(Constants.DATA_KEY, (ArrayList<Movie>) movieList);
         recyclerViewState = manager.onSaveInstanceState();
-        outState.putParcelable("state_key", recyclerViewState);
+        outState.putParcelable(Constants.STATE_KEY, recyclerViewState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            movieList = savedInstanceState.getParcelableArrayList("data_key");
-            recyclerViewState = savedInstanceState.getParcelable("state_key");
+            movieList = savedInstanceState.getParcelableArrayList(Constants.DATA_KEY);
+            recyclerViewState = savedInstanceState.getParcelable(Constants.STATE_KEY);
         }
     }
 
     private void myProfile() {
         if (user == null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Info");
-            builder.setMessage("Please Login to continue");
-            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.info);
+            builder.setMessage(R.string.login_to_continue);
+            builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     auth.signOut();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
@@ -395,7 +394,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click Back again to Exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.click_back_again), Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 

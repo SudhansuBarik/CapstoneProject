@@ -64,7 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         reviews = new ArrayList<>();
         movie1 = new Movie();
 
-        thumbnailImageView = findViewById(R.id.thumbnail_imageView);
+        thumbnailImageView = findViewById(R.id.details_thumbnail_imageView);
         titleTextView = findViewById(R.id.title_textView);
         ratingTextView = findViewById(R.id.rating_textView);
         releaseDateTextView = findViewById(R.id.release_date_textView);
@@ -134,9 +134,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
-//                movie = response.body();
+                movie = response.body();
 
-                movie = getIntent().getParcelableExtra("movie");
+//                movie = getIntent().getParcelableExtra("movie");
                 // Set thumbnail
                 Picasso.get().load(getResources()
                         .getString(R.string.base_tmdb_img_url) + "w342/" + movie.getPosterPath())

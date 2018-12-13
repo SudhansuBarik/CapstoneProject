@@ -69,17 +69,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         });
 
         // Passing all data to the detail activity through Intent
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
-                intent.putExtra("movie", moviesList.get(position));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                        holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
-                context.startActivity(intent, options.toBundle());
-            }
-        });
+//        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, MovieDetailsActivity.class);
+//                intent.putExtra("id", moviesList.get(position).getId());
+//                intent.putExtra("movie", moviesList.get(position));
+//                intent.putExtra("position", position);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+//                        holder.thumbnail, ViewCompat.getTransitionName(holder.thumbnail));
+//                context.startActivity(intent, options.toBundle());
+//            }
+//        });
     }
 
     class MoviesViewHolder extends RecyclerView.ViewHolder {
@@ -106,7 +108,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     intent.putExtra("id", moviesList.get(getAdapterPosition()).getId());
                     intent.putExtra("movie", moviesList.get(getAdapterPosition()));
                     intent.putExtra("position", getAdapterPosition());
-                    v.getContext().startActivity(intent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                            thumbnail, ViewCompat.getTransitionName(thumbnail));
+                    v.getContext().startActivity(intent, options.toBundle());
                 }
             });
         }
